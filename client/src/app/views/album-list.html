@@ -1,0 +1,39 @@
+<div class="head-page" *ngIf="identity">
+    <h1>{{title}}</h1>
+</div>
+
+<div class="clearfix"></div>
+
+<div class="row" id="gallery-albums" *ngIf="albums">
+    <!-- listar albums de artista -->
+    <div *ngFor="let album of albums" class="card">
+        <div class="album-img">
+            <img src="{{ url + 'get-image-album/' + album.image }}">
+        </div>
+        <div class="card-body album-card-body">
+            <a [routerLink]="['/album', album._id]">
+                {{ album.title }}
+            </a>
+            <p>
+                <a [routerLink]="['/artista', album.artist._id]">
+                    {{ album.artist.name }}
+                </a>
+            </p>
+            <div class="buttons" *ngIf="identity && identity.role == 'ROLE_ADMIN'">
+                <a [routerLink]="['/editar-album', album._id]" class="btn btn-warning btn-sm mr-1">Editar</a>
+                <a (click)="onDeleteConfirm(album._id)" class="btn btn-danger btn-sm">
+                    Borrar
+                </a>
+            </div>
+
+            <div class="seguro" *ngIf="confirmado == album._id">
+                <a (click)="onDeleteAlbum(album._id)" class="btn btn-danger btn-sm mr-1">
+                    Eliminar
+                </a>
+                <a (click)="onCancelAlbum()" class="btn btn-primary btn-sm">
+                    Cancelar
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

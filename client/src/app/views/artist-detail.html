@@ -1,0 +1,51 @@
+<div *ngIf="artist" class="artist-box p-2">
+    <div id="artist-head-card">
+        <div class="img">
+            <img src="{{ url + 'get-image-artist/' + artist.image }}" *ngIf="artist && artist.image !=''">
+        </div>
+        <div class="data">
+            <h1>{{ artist.name }}</h1>
+            <p class="description">{{artist.description}}</p>
+
+            <a [routerLink]="['/crear-album', artist._id]" *ngIf="identity.role == 'ROLE_ADMIN'" href="#" class="btn btn-secondary">
+                Añadir Album
+            </a>
+        </div>
+    </div>
+
+    <div class="clearfix"></div>
+
+    <div class="row" id="gallery-albums" *ngIf="albums">
+        <!-- listar albums de artista -->
+        <div *ngFor="let album of albums" class="card">
+            <div class="album-img">
+                <img src="{{ url + 'get-image-album/' + album.image }}">
+            </div>
+            <div class="card-body album-card-body">
+                <a [routerLink]="['/album', album._id]">
+                    {{ album.title }}
+                </a>
+                <p>
+                    <a [routerLink]="['/artista', album.artist._id]">
+                        {{ album.artist.name }}
+                    </a>
+                </p>
+                <div class="buttons" *ngIf="identity && identity.role == 'ROLE_ADMIN'">
+                    <a [routerLink]="['/editar-album', album._id]" class="btn btn-warning btn-sm mr-1">Editar</a>
+                    <a (click)="onDeleteConfirm(album._id)" class="btn btn-danger btn-sm">
+                        Borrar
+                    </a>
+                </div>
+    
+                <div class="seguro" *ngIf="confirmado == album._id">
+                    <a (click)="onDeleteAlbum(album._id)" class="btn btn-danger btn-sm mr-1">
+                        Eliminar
+                    </a>
+                    <a (click)="onCancelAlbum()" class="btn btn-primary btn-sm">
+                        Cancelar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,55 @@
+<div class="album-box p-2" *ngIf="album">
+    <div id="album-head-card">
+        <div class="img">
+            <img src="{{ url + 'get-image-album/' + album.image }}" *ngIf="album && album.image !=''">
+        </div>
+        <div class="data">
+            <h1>{{ album.title }}</h1>
+            <p class="mb-1"><strong>{{ album.artist.name }}</strong></p>
+            <p class="mb-1">{{ album.year }}</p>
+            <p class="mb-1">{{album.description}}</p>
+
+            <a [routerLink]="['/crear-tema', album._id]" *ngIf="identity.role == 'ROLE_ADMIN'" href="#" class="btn btn-secondary btn sm">
+                Añadir canción
+            </a>
+        </div>
+    </div>
+
+    <div class="clearfix"></div>
+
+    <div id="gallery-songs" *ngIf="songs">
+        <!-- listar caciones del album -->
+        <ul id="songs-list">
+            <li *ngFor="let song of songs" class="song-item">
+                <div class="title">
+                    <a class="btn btn-success" (click)="startPlayer(song)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-play-fill text-white" viewBox="0 0 16 16">
+                            <path d="M11.596 8.697l-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/>
+                        </svg>
+                    </a>
+                    
+                    {{song.number + '. '+ song.name + ' - '+ song.duration}}
+                    
+                    <div class="buttons text-white" *ngIf="identity && identity.role == 'ROLE_ADMIN'">
+                        <a [routerLink]="['/editar-tema', song._id]" class="btn btn-warning btn-sm mr-1">Editar</a>
+                        <a (click)="onDeleteConfirm(song._id)" class="btn btn-danger btn-sm">
+                            Borrar
+                        </a>
+                    </div>
+
+                    <div class="seguro seguro-song text-white" *ngIf="confirmado == song._id">
+                        <a (click)="onDeleteSong(song._id)" class="btn btn-danger btn-sm mr-1">
+                            Eliminar
+                        </a>
+                        <a (click)="onCancelSong()" class="btn btn-primary btn-sm">
+                            Cancelar
+                        </a>
+                    </div>
+
+                    <div class="clearfix"></div>
+                </div>
+            </li>
+        </ul>
+
+    </div>
+</div>
